@@ -9,7 +9,7 @@ object Main {
     val spark = SparkSession.builder.appName("Redis Stream Example")
       .master("local[*]")
       .config("spark.redis.host", "localhost")
-      .config("spark.redis.port", "6379")
+      .config("spark.redis.port", "6380")
       .getOrCreate()
 
     import spark.implicits._
