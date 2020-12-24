@@ -12,12 +12,19 @@ object Main {
       .config("spark.redis.port", "6380")
       .getOrCreate()
 
-    import spark.implicits._
-
-    val ssc = new StreamingContext(spark.sparkContext, Seconds(1))
+    val ssc = new StreamingContext(spark.sparkContext, Seconds(10))
 
     val stream = ssc.createRedisXStream(Seq(ConsumerConfig("mystream", "mygroup", "myconsumer1")))
-    stream.print()
+
+    stream.foreachRDD {rdd =>
+      rdd.foreach {si =>
+        println("*"*50)
+        println(si.fields)
+        println("*"*50)
+      }
+    }
+
+//    stream.print()
 
     ssc.start()
     ssc.awaitTermination()
